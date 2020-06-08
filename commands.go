@@ -27,6 +27,10 @@ type SentryData struct {
 	Mode string `json:"on"`
 }
 
+type ActuateTrunk struct {
+	WhichTrunk string `json:"which_trunk"`
+}
+
 // Causes the vehicle to abort the Autopark request
 func (v Vehicle) AutoparkAbort() error {
 	return v.autoPark("abort")
@@ -130,10 +134,15 @@ func (v Vehicle) ResetValetPIN() error {
 	return err
 }
 
-// Actuates the frunk
-func (v Vehicle) ActuateFrunk() error {
-	apiUrl := BaseURL + "/vehicles/" + strconv.FormatInt(v.ID, 10) + "/command/actuate_frunk"
-	_, err := sendCommand(apiUrl, nil)
+// Actuates the trunk or frunk
+func (v Vehicle) ActuateTrunk(whichTrunk string) error {
+	apiUrl := BaseURL + "/vehicles/" + strconv.FormatInt(v.ID, 10) + "/command/actuate_trunk"
+	actuateRequest := &ActuateTrunk{
+		WhichTrunk: whichTrunk,
+	}
+
+	body, _ := json.Marshal(actuateRequest)
+	_, err := sendCommand(apiUrl, body)
 	return err
 }
 
