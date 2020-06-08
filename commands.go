@@ -130,6 +130,13 @@ func (v Vehicle) ResetValetPIN() error {
 	return err
 }
 
+// Actuates the frunk
+func (v Vehicle) ActuateFrunk() error {
+	apiUrl := BaseURL + "/vehicles/" + strconv.FormatInt(v.ID, 10) + "/command/actuate_frunk"
+	_, err := sendCommand(apiUrl, nil)
+	return err
+}
+
 // Sets the charge limit to the standard setting
 func (v Vehicle) SetChargeLimitStandard() error {
 	apiUrl := BaseURL + "/vehicles/" + strconv.FormatInt(v.ID, 10) + "/command/charge_standard"
